@@ -41,7 +41,10 @@ public class PersonService
     {
         var personModel = from employee in _context.PersonModels
                           join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
-                          where (string.IsNullOrEmpty(name) || employee.FirstName.Contains(name) || employee.MiddleName.Contains(name) || employee.LastName.Contains(name))
+                          where (string.IsNullOrEmpty(name) || 
+                          (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) || 
+                          (!string.IsNullOrEmpty(employee.MiddleName) && employee.MiddleName.Contains(name)) || 
+                          (!string.IsNullOrEmpty(employee.LastName) && employee.LastName.Contains(name)))
                           && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
                           select employee;
 

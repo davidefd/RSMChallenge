@@ -1,86 +1,51 @@
 
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
-
 public class PersonService
 {
-    private DataClient _connection;
-    public PersonService(DataClient connection){
-        _connection = connection;
-    }
-    public List<PersonModel>? GetAll(){
-        try{
-            var result = _connection.GetResultsFromQuery<PersonModel>("SELECT * FROM [HumanResources].[vEmployee]", Map);           
-            return result;
-        }catch (Exception ex){
-            Console.WriteLine($"JustError: {ex.Message}");
-        }
-        return null;
+    private readonly AppDbContext _context;
+
+    public PersonService(AppDbContext context)
+    {
+        _context = context;
     }
 
-    public List<PersonModel>? GetPersonByName(string name){
-        try{
-            var result = _connection.GetResultsFromQuery<PersonModel>(
-                "SELECT * " +
-                "FROM [AdventureWorks2022].[HumanResources].[vEmployee] " +
-                $"WHERE CONCAT(FirstName,' ',MiddleName,' ',LastName) LIKE '%{name}%'", Map);
-            return result;
-        }catch (Exception ex){
-            Console.WriteLine($"JustError: {ex.Message}");
-        }
-        return null;
+    public List<PersonModel>? GetAll()
+    {
+        var personModel = _context.PersonModels.ToList();
+        return personModel;
     }
 
-    public List<PersonModel>? GetPersonByPersonType(string personType){
-        try{
-            var result = _connection.GetResultsFromQuery<PersonModel>(
-                "SELECT A.* " +
-                "FROM [AdventureWorks2022].[HumanResources].[vEmployee] A " +
-                "INNER JOIN Person.Person B ON a.BusinessEntityID = b.BusinessEntityID " +
-                $"WHERE B.PersonType = '{personType}'", Map);
-            return result;
-        }catch (Exception ex){
-            Console.WriteLine($"Error message: {ex.Message}");
-        }
-        return null;
+    public List<PersonModel> GetPersonByName(string name)
+    {
+        var personModel = _context.PersonModels
+                          .Where(e => (e.FirstName + " " + e.MiddleName + " " + e.LastName).Contains(name))
+                          .ToList();
+        return personModel;
     }
 
-    public List<PersonModel>? GetPersonByNameAndPersonType(string name, string personType){
-        try{
-            var result = _connection.GetResultsFromQuery<PersonModel>(
-                "SELECT * " +
-                $"FROM [AdventureWorks2022].[HumanResources].[vEmployee] A " +
-                $"INNER JOIN Person.Person B ON A.BusinessEntityID = B.BusinessEntityID " +
-                $"WHERE " +
-                $"    ('{name}' ='' OR '{name}' IS NULL OR CONCAT(A.FirstName, ' ', A.MiddleName, ' ', A.LastName) LIKE '%{name}%') " +
-                $"    AND " +
-                $"    ('{personType}' = '' OR '{personType}' IS NULL OR B.PersonType = '{personType}')", Map);
-            return result;
-        }catch (Exception ex){
-            Console.WriteLine($"JustError: {ex.Message}");
-        }
-        return null;
+    public List<PersonModel>? GetPersonByPersonType(string personType)
+    {
+        var personModel = _context.PersonModels
+                          .Join(
+                            _context.TablePersonModels,
+                            a => a.BusinessEntityID,
+                            b => b.BusinessEntityID,
+                            (a, b) => new { PersonModel = a, PersonPersonModel = b }
+                          )
+                          .Where(results => results.PersonPersonModel.PersonType == personType)
+                          .Select(result => result.PersonModel)
+                          .ToList();
+        return personModel;
     }
-    public PersonModel Map(IDataRecord record){
-        PersonModel person = new PersonModel();
-            person.BusinessEntityID = (int)record["BusinessEntityID"];
-            person.Title = record["Title"] as string;
-            person.FirstName = record["FirstName"] as string;
-            person.MiddleName = record["MiddleName"] as string;
-            person.LastName = record["LastName"] as string;
-            person.Suffix = record["Suffix"] as string;
-            person.JobTitle = record["JobTitle"] as string;
-            person.PhoneNumber = record["PhoneNumber"] as string;
-            person.PhoneNumberType = record["PhoneNumberType"] as string;
-            person.EmailAddress = record["EmailAddress"] as string;
-            person.EmailPromotion = (int)record["EmailPromotion"];
-            person.AddressLine1 = record["AddressLine1"] as string;
-            person.AddressLine1 = record["AddressLine1"] as string;
-            person.City = record["City"] as string;
-            person.StateProvinceName = record["StateProvinceName"] as string;
-            person.PostalCode = record["PostalCode"] as string;
-            person.CountryRegionName = record["CountryRegionName"] as string;
-            person.AdditionalContactInfo = record["AdditionalContactInfo"] as string;
-            return person;
+
+    public List<PersonModel> GetPersonByNameAndPersonType(string name, string personType)
+    {
+        var personModel = from employee in _context.PersonModels
+                          join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
+                          where (string.IsNullOrEmpty(name) || employee.FirstName.Contains(name) || employee.MiddleName.Contains(name) || employee.LastName.Contains(name))
+                          && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
+                          select employee;
+
+        var results = personModel.ToList();
+        return results;
     }
 }

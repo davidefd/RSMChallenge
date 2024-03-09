@@ -12,7 +12,7 @@ public class PersonService
     {
         try
         {
-            var personModel = _context.PersonModels.ToList();
+            List<PersonModel> personModel = _context.PersonModels.ToList();
             return personModel;
         }
         catch (Exception ex)
@@ -26,7 +26,7 @@ public class PersonService
     {
         try
         {
-            var personModel = _context.PersonModels
+            List<PersonModel> personModel = _context.PersonModels
                               .Where(e => (e.FirstName + " " + e.MiddleName + " " + e.LastName).Contains(name))
                               .ToList();
             return personModel;
@@ -43,7 +43,7 @@ public class PersonService
     {
         try
         {
-            var personModel = _context.PersonModels
+            List<PersonModel> personModel = _context.PersonModels
                               .Join(
                               _context.TablePersonModels,
                               a => a.BusinessEntityID,
@@ -67,14 +67,14 @@ public class PersonService
     {
         try
         {
-            var personModel = from employee in _context.PersonModels
-                              join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
-                              where (string.IsNullOrEmpty(name) ||
-                              (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) ||
-                              (!string.IsNullOrEmpty(employee.MiddleName) && employee.MiddleName.Contains(name)) ||
-                              (!string.IsNullOrEmpty(employee.LastName) && employee.LastName.Contains(name)))
-                              && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
-                              select employee;
+            List<PersonModel> personModel = from employee in _context.PersonModels
+                                            join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
+                                            where (string.IsNullOrEmpty(name) ||
+                                            (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) ||
+                                            (!string.IsNullOrEmpty(employee.MiddleName) && employee.MiddleName.Contains(name)) ||
+                                            (!string.IsNullOrEmpty(employee.LastName) && employee.LastName.Contains(name)))
+                                            && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
+                                            select employee;
 
             var results = personModel.ToList();
             return results;

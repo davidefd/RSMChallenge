@@ -1,3 +1,4 @@
+
 public class ProductModel
 {
     public int ProductID {get;set;}
@@ -6,7 +7,9 @@ public class ProductModel
     public string? Color {get;set;}
     public decimal? StandardCost {get;set;}
     public decimal? ListPrice {get;set;}
+    
     public int? ProductSubcategoryID {get;set;}
     public int? ProductModelID {get;set;}
+
     
 }

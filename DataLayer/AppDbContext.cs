@@ -36,13 +36,21 @@ public class AppDbContext : DbContext
                     .HasKey(p => p.ProductID);
 
         modelBuilder.Entity<SubCategoryModel>()
-                    .ToTable("ProductSubcategory", "Product")
-                    .HasKey();
+                    .ToTable("ProductSubcategory", "Production")
+                    .HasKey(p => p.ProductSubcategoryID);
 
         modelBuilder.Entity<CategoryModel>()
-                    .ToTable("ProductCategory", "Product")
-                    .HasKey();
-
+                    .ToTable("ProductCategory", "Production")
+                    .HasKey(p => p.ProductCategoryID);
+/*       
+        modelBuilder.Entity<ProductModel>().HasOne(p => p.SubCategoryModel)
+                                           .WithMany(s => s.ProductModels)
+                                           .HasForeignKey(p => p.ProductSubcategoryID);
+        
+        modelBuilder.Entity<SubCategoryModel>().HasOne(s => s.CategoryModel)
+                                               .WithMany(c => c.SubCategoryModels)
+                                               .HasForeignKey(s => s.ProductCategoryID);
+*/
     }
 
 }

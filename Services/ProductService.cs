@@ -1,4 +1,3 @@
-using System.Reflection;
 
 public class ProductService
 {
@@ -51,6 +50,7 @@ public class ProductService
                                 select product;
 
             var result = productModels.ToList();
+            return result;
         }
         catch (Exception ex)
         {
@@ -58,25 +58,18 @@ public class ProductService
         }
         return null;
     }
+
+
     /*
-var query = from product in dbContext.Products
-                        join subcategory in dbContext.ProductSubcategories on product.ProductSubcategoryID equals subcategory.ProductSubcategoryID
-                        join category in dbContext.ProductCategories on subcategory.ProductCategoryID equals category.ProductCategoryID
-                        where category.Name.Contains(name)
-                        select product;
+    var productModels = from product in _context.ProductModels
+                                    join subCategory in _context.SubCategoryModels on product.ProductSubcategoryID equals subCategory.ProductSubcategoryID
+                                    join category in _context.CategoryModels on subCategory.ProductCategoryID equals category.ProductCategoryID
+                                    where category.Name == categoryType
+                                    select product;
 
-            var result = query.ToList();
-
-
-
-SELECT A.* FROM [Production].[Product] A
-INNER JOIN [Production].[ProductSubcategory] B ON a.ProductSubcategoryID = b.ProductSubcategoryID
-INNER JOIN [Production].[ProductCategory] C ON b.ProductCategoryID = c.ProductCategoryID
-WHERE c.Name = '%{name}%';
-
-
-
-
-
+    _context.ProductModels
+                                .Where(p => p.SubCategoryModel.CategoryModel.Name.Contains(categoryType))
+                                .ToList();
     */
+
 }

@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
 
     public DbSet<PersonModel> PersonModels { get; set; }
     public DbSet<TablePersonModel> TablePersonModels { get; set; }
+    public DbSet<ProductModel> ProductModels { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,6 +29,10 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<TablePersonModel>()
                     .Property(p => p.PersonType).HasColumnType("nchar");
+
+        modelBuilder.Entity<ProductModel>()
+                    .ToTable("Product","Production")
+                    .HasKey(p => p.ProductID);
 
     }
 

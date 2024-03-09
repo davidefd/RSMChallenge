@@ -67,7 +67,7 @@ public class PersonService
     {
         try
         {
-            List<PersonModel> personModel = from employee in _context.PersonModels
+            var personModel = from employee in _context.PersonModels
                                             join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
                                             where (string.IsNullOrEmpty(name) ||
                                             (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) ||

@@ -9,6 +9,7 @@ public class Program
         builder.Services
         .AddSingleton<AppDbContext>()
         .AddSingleton<PersonService>()
+        .AddSingleton<ProductService>()
         .AddCors(options =>
         {
             options.AddPolicy("AllowAll",
@@ -38,6 +39,8 @@ public class Program
         app.MapGet("/person/GetByEmpType", (PersonService personService, [FromQuery] string emplType) => Results.Ok(personService.GetPersonByPersonType(emplType)));
         app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
         //Person methods
+
+        app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
         //Products methods
         app.Run();
     }

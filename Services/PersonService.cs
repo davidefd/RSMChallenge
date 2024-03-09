@@ -30,7 +30,6 @@ public class PersonService
                               .Where(e => (e.FirstName + " " + e.MiddleName + " " + e.LastName).Contains(name))
                               .ToList();
             return personModel;
-
         }
         catch (Exception ex)
         {
@@ -53,8 +52,8 @@ public class PersonService
                              .Where(results => results.PersonPersonModel.PersonType == personType)
                              .Select(result => result.PersonModel)
                              .ToList();
+            
             return personModel;
-
         }
         catch (Exception ex)
         {
@@ -68,17 +67,16 @@ public class PersonService
         try
         {
             var personModel = from employee in _context.PersonModels
-                                            join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
-                                            where (string.IsNullOrEmpty(name) ||
-                                            (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) ||
-                                            (!string.IsNullOrEmpty(employee.MiddleName) && employee.MiddleName.Contains(name)) ||
-                                            (!string.IsNullOrEmpty(employee.LastName) && employee.LastName.Contains(name)))
-                                            && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
-                                            select employee;
+                              join person in _context.TablePersonModels on employee.BusinessEntityID equals person.BusinessEntityID
+                              where (string.IsNullOrEmpty(name) ||
+                              (!string.IsNullOrEmpty(employee.FirstName) && employee.FirstName.Contains(name)) ||
+                              (!string.IsNullOrEmpty(employee.MiddleName) && employee.MiddleName.Contains(name)) ||
+                              (!string.IsNullOrEmpty(employee.LastName) && employee.LastName.Contains(name)))
+                              && (string.IsNullOrEmpty(personType) || person.PersonType == personType)
+                              select employee;
 
             var results = personModel.ToList();
             return results;
-
         }
         catch (Exception ex)
         {

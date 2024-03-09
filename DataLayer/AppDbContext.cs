@@ -15,7 +15,8 @@ public class AppDbContext : DbContext
     public DbSet<PersonModel> PersonModels { get; set; }
     public DbSet<TablePersonModel> TablePersonModels { get; set; }
     public DbSet<ProductModel> ProductModels { get; set; }
-
+    public DbSet<SubCategoryModel> SubCategoryModels { get; set; }
+    public DbSet<CategoryModel> CategoryModels { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,6 +34,14 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<ProductModel>()
                     .ToTable("Product","Production")
                     .HasKey(p => p.ProductID);
+
+        modelBuilder.Entity<SubCategoryModel>()
+                    .ToTable("ProductSubcategory", "Product")
+                    .HasKey();
+
+        modelBuilder.Entity<CategoryModel>()
+                    .ToTable("ProductCategory", "Product")
+                    .HasKey();
 
     }
 

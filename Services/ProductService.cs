@@ -21,4 +21,12 @@ public class ProductService
         }
         return null;
     }
+
+    /*
+    SELECT A.*
+FROM [Production].[Product] A
+INNER JOIN [Production].[ProductSubcategory] B ON a.ProductSubcategoryID = b.ProductSubcategoryID
+INNER JOIN [Production].[ProductCategory] C ON b.ProductCategoryID = c.ProductCategoryID
+WHERE c.Name = 'Clothing';
+    */
 }

@@ -41,6 +41,8 @@ public class Program
         //Person methods
 
         app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
+        app.MapGet("/product/GetByName", (ProductService productService, [FromQuery] string name) => Results.Ok(productService.GetProductByName(name)));
+
         //Products methods
         app.Run();
     }

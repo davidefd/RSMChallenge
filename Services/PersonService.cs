@@ -45,8 +45,8 @@ public class PersonService
             List<PersonModel> personModel = _context.PersonModels
                               .Join(
                               _context.TablePersonModels,
-                              a => a.BusinessEntityID,
-                              b => b.BusinessEntityID,
+                              a => a.BusinessEntityID, //this references BusinessEntityID in PersonModel 
+                              b => b.BusinessEntityID, //this references BusinessEntityID in TablePersonModel
                               (a, b) => new { PersonModel = a, PersonPersonModel = b }
                               )
                              .Where(results => results.PersonPersonModel.PersonType == personType)

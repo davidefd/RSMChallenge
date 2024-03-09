@@ -42,7 +42,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<CategoryModel>()
                     .ToTable("ProductCategory", "Production")
                     .HasKey(p => p.ProductCategoryID);
-/*       
+       
         modelBuilder.Entity<ProductModel>().HasOne(p => p.SubCategoryModel)
                                            .WithMany(s => s.ProductModels)
                                            .HasForeignKey(p => p.ProductSubcategoryID);
@@ -50,7 +50,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<SubCategoryModel>().HasOne(s => s.CategoryModel)
                                                .WithMany(c => c.SubCategoryModels)
                                                .HasForeignKey(s => s.ProductCategoryID);
-*/
+
     }
 
 }

@@ -39,28 +39,6 @@ public class ProductService
         }
         return null;
     }
-    /*
-        public List<ProductModel>? GetProductByCategoryType(string categoryType)
-        {
-            try
-            {
-                var productModels = from product in _context.ProductModels
-                                    join subCategory in _context.SubCategoryModels on product.ProductSubcategoryID equals subCategory.ProductSubcategoryID
-                                    join category in _context.CategoryModels on subCategory.ProductCategoryID equals category.ProductCategoryID
-                                    where category.Name == categoryType
-                                    select product;
-
-                var result = productModels.ToList();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"JustError: {ex.Message}");
-            }
-            return null;
-        }
-
-    */
 
     public List<ProductModel>? GetProductByCategoryType(string categoryType)
     {
@@ -83,4 +61,26 @@ public class ProductService
         return null;
     }
 
+    /*
+           public List<ProductModel>? GetProductByCategoryType(string categoryType)
+           {
+               try
+               {
+                   var productModels = from product in _context.ProductModels
+                                       join subCategory in _context.SubCategoryModels on product.ProductSubcategoryID equals subCategory.ProductSubcategoryID
+                                       join category in _context.CategoryModels on subCategory.ProductCategoryID equals category.ProductCategoryID
+                                       where category.Name == categoryType
+                                       select product;
+
+                   var result = productModels.ToList();
+                   return result;
+               }
+               catch (Exception ex)
+               {
+                   Console.WriteLine($"JustError: {ex.Message}");
+               }
+               return null;
+           }
+
+       */
 }

@@ -17,6 +17,11 @@ public class AppDbContext : DbContext
     public DbSet<ProductModel> ProductModels { get; set; }
     public DbSet<SubCategoryModel> SubCategoryModels { get; set; }
     public DbSet<CategoryModel> CategoryModels { get; set; }
+    public DbSet<SalesPersonModel> SalesPersonModels { get; set; }
+    public DbSet<SalesQuotaHistoryModel> SalesQuotaHistoryModels { get; set; }
+    public DbSet<SalesTerritory> SalesTerritorys { get; set; }
+    public DbSet<SalesTerritoryHistory> SalesTerritoryHistorys { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,7 +37,7 @@ public class AppDbContext : DbContext
                     .Property(p => p.PersonType).HasColumnType("nchar");
 
         modelBuilder.Entity<ProductModel>()
-                    .ToTable("Product","Production")
+                    .ToTable("Product", "Production")
                     .HasKey(p => p.ProductID);
 
         modelBuilder.Entity<SubCategoryModel>()
@@ -42,14 +47,26 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<CategoryModel>()
                     .ToTable("ProductCategory", "Production")
                     .HasKey(p => p.ProductCategoryID);
-       
+
         modelBuilder.Entity<ProductModel>().HasOne(p => p.SubCategoryModel)
                                            .WithMany(s => s.ProductModels)
                                            .HasForeignKey(p => p.ProductSubcategoryID);
-        
+
         modelBuilder.Entity<SubCategoryModel>().HasOne(s => s.CategoryModel)
                                                .WithMany(c => c.SubCategoryModels)
                                                .HasForeignKey(s => s.ProductCategoryID);
+
+        modelBuilder.Entity<SalesPersonModel>().ToTable("SalesPerson", "Sales")
+                                                .HasKey(p => p.BusinessEntityID);
+
+        modelBuilder.Entity<SalesQuotaHistoryModel>().ToTable("SalesPersonQuotaHistory", "Sales")
+                                                .HasKey(p => p.BusinessEntityID);
+
+        modelBuilder.Entity<SalesTerritory>().ToTable("SalesTerritory", "Sales")
+                                                .HasKey(p => p.Territory_ID);
+
+        modelBuilder.Entity<SalesTerritoryHistory>().ToTable("SalesTerritoryHistory", "Sales")
+                                                .HasKey(p => p.BusinessEntityID);
 
     }
 

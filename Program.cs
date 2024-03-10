@@ -10,6 +10,7 @@ public class Program
         .AddSingleton<AppDbContext>()
         .AddSingleton<PersonService>()
         .AddSingleton<ProductService>()
+        .AddSingleton<SalesService>()
         .AddCors(options =>
         {
             options.AddPolicy("AllowAll",
@@ -43,8 +44,10 @@ public class Program
         app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
         app.MapGet("/product/GetProductByName", (ProductService productService, [FromQuery] string name) => Results.Ok(productService.GetProductByName(name)));
         app.MapGet("/person/GetProductsByCategoryType", (ProductService productService, [FromQuery] string categoryType) => Results.Ok(productService.GetProductByCategoryType(categoryType)));
-
         //Products methods
+
+        app.MapGet("/sales", (SalesService salesService) => Results.Ok(salesService.GetAll()));
+        //Challenge methods
         app.Run();
     }
 }

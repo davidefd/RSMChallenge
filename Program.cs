@@ -47,6 +47,7 @@ public class Program
         //Products methods
 
         app.MapGet("/sales", (SalesService salesService) => Results.Ok(salesService.GetAll()));
+        app.MapGet("/sales/GetSalesByNameAndYear", (SalesService salesService, [FromQuery] string name ,int year) => Results.Ok(salesService.GetBySalesByPersonAndYear(name, year)));
         //Challenge methods
         app.Run();
     }

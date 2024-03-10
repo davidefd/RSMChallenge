@@ -9,7 +9,6 @@ public class SalesOverview
     public string? JobTitle { get; set; }
     
     //SalesPersonModel
-    public int TerritoryID { get; set; }
     public decimal? SP_Sales_Quota { get; set; }
     public decimal? Bonus { get; set; }
     public decimal? CommissionPct { get; set; }
